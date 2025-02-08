@@ -11,6 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.naver.et0709.weatherwear.repository.UserRepository;
 
+import java.util.HashMap;
+import java.util.Map;
+
 //회원가입 전체 프로세스
 @Data
 @Service
@@ -68,6 +71,12 @@ public class SignUpService {
 
         //인증코드 삭제
         emailVerificationService.removeVerificationCode(signUpDto.getEmail());
-        return SignUpResponseDto.setSuccess("회원가입이 성공적으로 완료되었습니다.");
+
+        // 성공 응답에 사용자 이름과 이메일 포함
+        Map<String, String> userData = new HashMap<>();
+        userData.put("name", user.getName());
+        userData.put("email", user.getEmail());
+
+        return SignUpResponseDto.setSuccessData("회원가입이 성공적으로 완료되었습니다.", userData);
     }
 }
